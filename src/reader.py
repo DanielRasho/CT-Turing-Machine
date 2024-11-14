@@ -18,7 +18,7 @@ class Reader(object):
       self.estados = self.tm_machine['q_states']['q_list']
       self.alfabeto = self.tm_machine['alphabet']
       self.alfabetoEntrada = self.alfabeto
-      self.tape_alphabet = self.tm_machine['tape_alphabet'] + self.alfabeto
+      self.tape_alphabet = self.tm_machine['tape_alphabet'] + self.alfabeto + ['']
       self.q0 = self.tm_machine['q_states']['initial']
       self.aceptacion = self.tm_machine['q_states']['final']
       self.rechazo = self.tm_machine['q_states']['reject']
@@ -26,15 +26,22 @@ class Reader(object):
       self.cadena = self.tm_machine['simulation_strings'][0]
     
     def get_create_Transitions(self):
-      transiciones = {}
-      lista_params = self.tm_machine['delta']
-      valor = ''
-      for l in lista_params:
-        if valor != l['params']['initial_state']:
-          valor = l['params']['initial_state']
-          transiciones[valor] = {}
-        input_value = l['params']['tape_input']
-        transiciones[valor][input_value] = [l['output']['final_state'], 
+        transiciones = {}
+        lista_params = self.tm_machine['delta']
+        for l in lista_params:
+            input_state = l['params']['initial_state']
+            input_cache = l['params']['mem_cache_value']
+            input_tape = l['params']['tape_input']
+            if input_state not in transiciones.keys(): # crear diccionario estado si no existe.
+                transiciones[input_state] = {}
+            if input_cache not in transiciones[input_state].keys(): # crear diccionario cache si no existe.
+                transiciones[input_state][input_cache] = {}
+            if input_tape not in transiciones[input_state][input_cache].keys(): # Agregar configuracion de salida.
+                transiciones[input_state][input_cache][input_tape] = [l['output']['final_state'], 
+                                            l['output']['mem_cache_value'],
                                             l['output']['tape_output'],
                                             l['output']['tape_displacement']]
-      self.transiciones = transiciones
+            else: # Error, porque cada configuracion estado, cache, input solo puede tener UN output
+                print('ERROR.')
+        self.transiciones = transiciones
+        #print(self.transiciones)

@@ -1,6 +1,5 @@
 import os
 from graphviz import Digraph
-from reader import Reader
 class TM:
     """
     Clase para simular una Máquina de Turing determinista.
@@ -12,7 +11,8 @@ class TM:
         q0 (str): Estado inicial.
         aceptacion (str): Estado de aceptación.
         rechazo (str): Estado de rechazo.
-        transiciones (dict): Diccionario de transiciones con formato {estado: {simbolo: [siguiente_estado, simbolo_escrito, direccion]}}.
+        transiciones (dict): Diccionario de transiciones con formato 
+            {estado: {cache : {simbolo: [siguiente_estado, nuevo_cache, simbolo_escrito, direccion]}}}.
 
     Ejemplo de configuración:
         estados = ['q0', 'q1', 'q2', 'q3', 'q4']
@@ -22,9 +22,22 @@ class TM:
         aceptacion = 'q4'
         rechazo = 'q3'
         transiciones = {
-            'q0': {'0': ['q1', '0', 'R'], '1': ['q3', '1', 'R']},
-            'q1': {'0': ['q1', '0', 'R'], '1': ['q2', '1', 'R']},
-            'q2': {'0': ['q2', '0', 'R'], '1': ['q2', '1', 'R'], 'B': ['q4', 'B', 'R']}
+            'q0': {
+                '0': {
+                    '0': ['q1', '1' '0', 'R'],
+                    '1': ['q3', '0' 1', 'R']},
+                'B': {
+                    '0': ['q1', 'B', '0', 'R'],
+                    '1': ['q3', 'B', '1', 'R']},
+            } 
+            'q1': {
+                '1': {
+                    '0': ['q1', 'B', 0', 'R'], 
+                    '1': ['q2', 'B', '1', 'R']}
+                'B': {
+                    '0': ['q1', 'B', '0', 'R'], 
+                    '1': ['q2', 'B', '1', 'R']}
+            }
         }
     """
 
@@ -47,12 +60,27 @@ class TM:
 
     def isValidTransitions(self):
         """Valida si las transiciones cumplen con el alfabeto de la cinta y estados definidos."""
-        for estado, trans in self.transiciones.items():
+        for estado, estados_cache in self.transiciones.items():
             if estado not in self.estados:
                 return False
-            for simbolo, (siguiente_estado, simbolo_escrito, _) in trans.items():
-                if simbolo not in self.alfabetoCinta or simbolo_escrito not in self.alfabetoCinta or siguiente_estado not in self.estados:
+            for simbolo_cache, transiciones in estados_cache.items():
+                if simbolo_cache not in self.alfabetoCinta:
+                    # print(f"cache invalido: {simbolo_cache}")
                     return False
+                for simbolo_entrada, (siguiente_estado, siguiente_cache, siguiente_letra, _) in transiciones.items():
+                   #print(simbolo_entrada)
+                    if siguiente_estado not in self.estados:
+                        # print("siguiente estado invalido")
+                        return False
+                    if simbolo_entrada not in self.alfabetoCinta:
+                        # print("simbolo entrada invalido")
+                        return False
+                    if siguiente_cache not in self.alfabetoCinta:
+                        # print("siguiente cache invalido")
+                        return False
+                    if siguiente_letra not in self.alfabetoCinta:
+                        # print("siguiente letra invalido")
+                        return False
         return True
     
     def imprimir_tabla_transiciones(self):
@@ -84,6 +112,8 @@ class TM:
         
         result = ""
         estado_actual = self.q0
+        cache = ''
+
         self.historial = []  # Reiniciar historial en cada simulación
         isBucle = False  # Flag para controlar el bucle
 
@@ -99,23 +129,42 @@ class TM:
             # Formatear la cinta con el estado y el símbolo en la posición del cabezal
             cinta_formateada = (
                 ''.join(self.cinta[:self.posCabezal]) +
-                f"[{estado_actual}, {simbolo_actual}]" +
+                f"[{estado_actual}, '{cache}']{simbolo_actual}" +
                 ''.join(self.cinta[self.posCabezal + 1:])
             )
             self.historial.append(f"|- {cinta_formateada}")
 
+            print("==========") 
+            print(estado_actual)
+            print(cache)
+            print(self.transiciones)
+            print(self.transiciones.get(estado_actual, {}))
+            print(self.transiciones.get(estado_actual, {}).get(cache, {}).get(simbolo_actual, {}))
+            print("==========")
+
             # Detectar bucle verificando si la transición no existe
-            if simbolo_actual not in self.transiciones.get(estado_actual, {}):
+            if simbolo_actual not in self.transiciones.get(estado_actual, {}) \
+                .get(cache, {}):
                 result = "bucle"
                 self.historial.append(f"|- [{estado_actual}] - No tiene transición para [{simbolo_actual}], se detectó un bucle")
                 isBucle = True
                 continue
 
             # Obtener la transición y actualizar la cinta, estado y cabezal
-            siguiente_estado, simbolo_escrito, direccion = self.transiciones[estado_actual][simbolo_actual]
+            siguiente_estado, siguiente_cache, simbolo_escrito, direccion = self.transiciones[estado_actual][cache][simbolo_actual]
             self.cinta[self.posCabezal] = simbolo_escrito
             estado_actual = siguiente_estado
-            self.posCabezal += 1 if direccion == 'R' else -1
+            cache = siguiente_cache
+            
+            # Cambiar posicion del cabezal
+            if direccion == 'R':
+                self.posCabezal += 1
+            elif direccion == 'L':
+                self.posCabezal -= 1
+            elif direccion != 'S':
+                self.historial.append(f"|- movimiento de cabezal invalido: {direccion}")
+                isBucle = True
+                continue
 
             # Asegurar que el cabezal no se salga de la cinta
             if self.posCabezal < 0:
