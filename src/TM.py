@@ -91,7 +91,7 @@ class TM:
             for simbolo in self.transiciones[estado]:
                 siguiente_estado, simbolo_escrito, direccion = self.transiciones[estado][simbolo]
                 print(f"{estado:<10}{simbolo:<10}{siguiente_estado:<20}{simbolo_escrito:<20}{direccion}")
-
+    
     def simulate(self, cadena, cintaConfiguration=[], positionCabezal=0):
         """
         Ejecuta la simulación de la máquina de Turing con la cadena de entrada.
@@ -117,16 +117,15 @@ class TM:
         self.historial = []  # Reiniciar historial en cada simulación
         isBucle = False  # Flag para controlar el bucle
 
+        # Encabezado para la cadena actual
+        self.historial.append(f"Descripciones instantáneas de cadena: {cadena}")
+        
         # Usar la configuración de la cinta si se proporciona, de lo contrario, usa la cadena
         self.cinta = cintaConfiguration if cintaConfiguration else list(cadena) + ['B'] * (self.size_cinta - len(cadena))
-
-        # Asignar la posición del cabezal dependiendo de si se pasó una configuración de la cinta
         self.posCabezal = positionCabezal if cintaConfiguration else 0
 
         while not isBucle and (estado_actual != self.aceptacion and estado_actual != self.rechazo):
             simbolo_actual = self.cinta[self.posCabezal]
-
-            # Formatear la cinta con el estado y el símbolo en la posición del cabezal
             cinta_formateada = (
                 ''.join(self.cinta[:self.posCabezal]) +
                 f"[{estado_actual}, '{cache}']{simbolo_actual}" +
@@ -134,19 +133,8 @@ class TM:
             )
             self.historial.append(f"|- {cinta_formateada}")
 
-            '''
-            print("==========") 
-            print(estado_actual)
-            print(cache)
-            print(self.transiciones)
-            print(self.transiciones.get(estado_actual, {}))
-            print(self.transiciones.get(estado_actual, {}).get(cache, {}).get(simbolo_actual, {}))
-            print("==========")
-            '''
-
             # Detectar bucle verificando si la transición no existe
-            if simbolo_actual not in self.transiciones.get(estado_actual, {}) \
-                .get(cache, {}):
+            if simbolo_actual not in self.transiciones.get(estado_actual, {}).get(cache, {}):
                 result = "bucle"
                 self.historial.append(f"|- [{estado_actual}] - No tiene transición para [{simbolo_actual}], se detectó un bucle")
                 isBucle = True
@@ -157,7 +145,7 @@ class TM:
             self.cinta[self.posCabezal] = simbolo_escrito
             estado_actual = siguiente_estado
             cache = siguiente_cache
-            
+
             # Cambiar posicion del cabezal
             if direccion == 'R':
                 self.posCabezal += 1
@@ -190,10 +178,12 @@ class TM:
             )
             self.historial.append(f"|- {cinta_formateada}")
 
+        # Añadir salto de línea al final de cada simulación
+        self.historial.append("\n")
         return result, self.historial
 
     def writeInTXT(self):
-        """Escribe el historial de la simulación en un archivo de texto."""
+        """Escribe el historial de la simulación en un archivo de texto con un formato específico."""
         with open('historial.txt', 'w') as f:
             for paso in self.historial:
                 f.write(paso + '\n')
@@ -226,50 +216,3 @@ class TM:
 
         print(f"Grafo de la máquina de Turing generado y guardado en {file_path}.png.")
 
-
-# EJEMPLO DE USO
-
-# Crear instancia de la clase TM con los parámetros
-estados = ['q0', 'q1', 'q2', 'q3', 'q4']
-alfabetoEntrada = ['0', '1']
-alfabetoCinta = ['0', '1', 'B']
-q0 = 'q0'
-aceptacion = 'q4'
-rechazo = 'q3'
-transiciones = {
-    'q0': {
-        '0': ['q1', '0', 'R'], 
-        '1': ['q3', '1', 'R']
-    },
-    'q1': {
-        '0': ['q1', '0', 'R'], 
-        '1': ['q2', '1', 'R']
-    },
-    'q2': {
-        '0': ['q2', '0', 'R'], 
-        '1': ['q2', '1', 'R'], 
-        'B': ['q4', 'B', 'R']
-    }
-}
-
-
-# read = Reader('Proyecto4\\files\\turing_machine.yaml')
-# maquina = TM(lector=read)
-
-# # Ejecutar la simulación
-# result, historial = maquina.simulate(read.cadena) #11 rechazo, 01 aceptado, 00 bucle (con 00, si se borra transiciones de q1 -> bucle, si se borra trasicion de q1 leyendo 0 -> bucle)
-# print(f"El resultado es \"{result}\".\nLos pasos de la MT son:")
-
-# # Imprimir el historial de pasos
-# for paso in historial:
-#     print(paso)
-
-
-# # # Llamar al método para imprimir la tabla de transiciones
-# # maquina.imprimir_tabla_transiciones()
-
-# # Llamar al método para generar el grafo
-# maquina.graph()
-
-# # # Guardar el historial de pasos
-# maquina.writeInTXT()
