@@ -112,7 +112,7 @@ class TM:
         
         result = ""
         estado_actual = self.q0
-        cache = ''
+        cache = 'B' # Carácter para estado vacío
 
         self.historial = []  # Reiniciar historial en cada simulación
         isBucle = False  # Flag para controlar el bucle
@@ -151,7 +151,9 @@ class TM:
                 self.posCabezal += 1
             elif direccion == 'L':
                 self.posCabezal -= 1
-            elif direccion != 'S':
+            elif direccion == 'S':
+                pass
+            else :
                 self.historial.append(f"|- movimiento de cabezal invalido: {direccion}")
                 isBucle = True
                 continue
