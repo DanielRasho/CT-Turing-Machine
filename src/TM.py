@@ -134,6 +134,7 @@ class TM:
             )
             self.historial.append(f"|- {cinta_formateada}")
 
+            '''
             print("==========") 
             print(estado_actual)
             print(cache)
@@ -141,6 +142,7 @@ class TM:
             print(self.transiciones.get(estado_actual, {}))
             print(self.transiciones.get(estado_actual, {}).get(cache, {}).get(simbolo_actual, {}))
             print("==========")
+            '''
 
             # Detectar bucle verificando si la transición no existe
             if simbolo_actual not in self.transiciones.get(estado_actual, {}) \
@@ -209,10 +211,11 @@ class TM:
                 dot.node(estado) 
 
         for estado in self.transiciones:
-            for simbolo in self.transiciones[estado]:
-                siguiente_estado, simbolo_escrito, direccion = self.transiciones[estado][simbolo]
-                label = f'{simbolo} / {simbolo_escrito}, {direccion}'
-                dot.edge(estado, siguiente_estado, label=label)
+            for cache in self.transiciones[estado]:
+                for simbolo in self.transiciones[estado][cache]:
+                    siguiente_estado, siguiente_cache, simbolo_escrito, direccion = self.transiciones[estado][cache][simbolo]
+                    label = f'({simbolo}, {cache} / {simbolo_escrito}, {siguiente_cache} ,{direccion})'
+                    dot.edge(estado, siguiente_estado, label=label)
 
         if not os.path.exists('graphs'):
             os.makedirs('graphs')

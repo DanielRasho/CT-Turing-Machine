@@ -34,8 +34,8 @@ with st.container():
             st.subheader('Configuraciones de la cinta')
             st.write(f"<span style='font-size:20px; font-style:italic;'>{pasos}</span>", unsafe_allow_html=True)
             st.subheader('Digrama de la Maquina de Turing')
-            # maquina.graph()
-            # st.image('./graphs/maquina_turing.png')
+            maquina.graph()
+            st.image('./graphs/maquina_turing.png')
 
             txt_content = f"CONFIGURACIONES MAQUINA DE TURING\nCadena: {lector.cadena}\nConfiguraciones:\n" + pasos_show
             st.download_button(
