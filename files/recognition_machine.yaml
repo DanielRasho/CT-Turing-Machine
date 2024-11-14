@@ -39,16 +39,6 @@ delta:
 
   - params:
       initial_state: q0
-      tape_input: 'B'
-      mem_cache_value: 'B'
-    output:
-      final_state: q_accept
-      tape_output: 'B'
-      tape_displacement: S
-      mem_cache_value: 'B'
-
-  - params:
-      initial_state: q0
       tape_input: 'Y'
       mem_cache_value: 'B'
     output:
@@ -159,6 +149,17 @@ delta:
       tape_displacement: S
       mem_cache_value: 'B'
 
+  # Transición adicional para evitar el bucle
+  - params:
+      initial_state: q2
+      tape_input: 'X'
+      mem_cache_value: 'B'
+    output:
+      final_state: q_reject
+      tape_output: 'X'
+      tape_displacement: S
+      mem_cache_value: 'B'
+
  # Transiciones q3
   - params:
       initial_state: q3
@@ -209,6 +210,7 @@ delta:
       tape_output: 'b'
       tape_displacement: S
       mem_cache_value: 'B'
+
 
 # Simulation
 posHead: 0
