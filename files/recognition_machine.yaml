@@ -215,14 +215,9 @@ delta:
 # Simulation
 posHead: 0
 simulation_strings:
-  - 'aaabbb' # Accepted
-  - 'aabb'   # Accepted
-  - 'aaabb'  # Rejected (mismatch in number of a's and b's)
-  - 'aabbbb' # Rejected (mismatch in number of a's and b's)
-  - 'ab'
-  - 'aaaaaab'
-  - 'b'
-  - 'aab'
-  - 'aabbbbbbbbb'
+  - 'aaaaaabbbbbb'
   - 'aaaaabbbbb'
-  - 'sde'
+  - 'abababababa'
+  - 'aabbbbbb'
+  - 'aaaaaabbb'
+
