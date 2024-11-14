@@ -22,7 +22,7 @@ class Reader(object):
         self.q0 = self.tm_machine['q_states']['initial']
         self.aceptacion = self.tm_machine['q_states']['final']
         self.rechazo = self.tm_machine['q_states']['reject']
-        self.posCabezal = self.tm_machine['posHead']
+        self.posCabezal = self.tm_machine.get('posHead', 0)
         # Guarda todas las cadenas en una lista en lugar de solo la primera
         self.cintas = self.tm_machine['simulation_strings']
     
