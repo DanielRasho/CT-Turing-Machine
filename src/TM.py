@@ -67,7 +67,7 @@ class TM:
                 if simbolo_cache not in self.alfabetoCinta:
                     # print(f"cache invalido: {simbolo_cache}")
                     return False
-                for simbolo_entrada, (siguiente_estado, siguiente_cache, siguiente_letra, _) in transiciones.items():
+                for simbolo_entrada, (siguiente_estado, siguiente_cache, siguiente_letra, _, _) in transiciones.items():
                    #print(simbolo_entrada)
                     if siguiente_estado not in self.estados:
                         # print("siguiente estado invalido")
@@ -89,6 +89,7 @@ class TM:
         
         for estado in self.transiciones:
             for simbolo in self.transiciones[estado]:
+                
                 siguiente_estado, simbolo_escrito, direccion = self.transiciones[estado][simbolo]
                 print(f"{estado:<10}{simbolo:<10}{siguiente_estado:<20}{simbolo_escrito:<20}{direccion}")
     
@@ -131,7 +132,7 @@ class TM:
                 f"[{estado_actual}, '{cache}']{simbolo_actual}" +
                 ''.join(self.cinta[self.posCabezal + 1:])
             )
-            self.historial.append(f"|- {cinta_formateada}")
+            # self.historial.append(f"|- {cinta_formateada}")
 
             # Detectar bucle verificando si la transición no existe
             if simbolo_actual not in self.transiciones.get(estado_actual, {}).get(cache, {}):
@@ -141,7 +142,11 @@ class TM:
                 continue
 
             # Obtener la transición y actualizar la cinta, estado y cabezal
-            siguiente_estado, siguiente_cache, simbolo_escrito, direccion = self.transiciones[estado_actual][cache][simbolo_actual]
+            siguiente_estado, siguiente_cache, simbolo_escrito, direccion, num_transicion = self.transiciones[estado_actual][cache][simbolo_actual]
+            
+            # Registrar el paso con el número de transición
+            self.historial.append(f"({num_transicion:<3}) |- {cinta_formateada}")
+
             self.cinta[self.posCabezal] = simbolo_escrito
             estado_actual = siguiente_estado
             cache = siguiente_cache
@@ -205,7 +210,7 @@ class TM:
         for estado in self.transiciones:
             for cache in self.transiciones[estado]:
                 for simbolo in self.transiciones[estado][cache]:
-                    siguiente_estado, siguiente_cache, simbolo_escrito, direccion = self.transiciones[estado][cache][simbolo]
+                    siguiente_estado, siguiente_cache, simbolo_escrito, direccion, _ = self.transiciones[estado][cache][simbolo]
                     label = f'({simbolo}, {cache} / {simbolo_escrito}, {siguiente_cache} ,{direccion})'
                     dot.edge(estado, siguiente_estado, label=label)
 

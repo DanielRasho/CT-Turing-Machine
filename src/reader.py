@@ -29,6 +29,7 @@ class Reader(object):
     def get_create_Transitions(self):
         transiciones = {}
         lista_params = self.tm_machine['delta']
+        num_transicion = 1 # enumerar las transiciones
         for l in lista_params:
             input_state = l['params']['initial_state']
             input_cache = l['params']['mem_cache_value']
@@ -42,8 +43,10 @@ class Reader(object):
                     l['output']['final_state'],
                     l['output']['mem_cache_value'],
                     l['output']['tape_output'],
-                    l['output']['tape_displacement']
+                    l['output']['tape_displacement'],
+                    num_transicion
                 ]
+                num_transicion += 1
             else:  # Error, porque cada configuracion estado, cache, input solo puede tener UN output
                 print('ERROR.')
         self.transiciones = transiciones
