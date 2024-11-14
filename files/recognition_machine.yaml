@@ -7,97 +7,213 @@ q_states:
     - q1
     - q2
     - q3
-    - q4
-    - q5
+    - q_accept
+    - q_reject
   initial: q0
-  final: q4
-  reject: q5
+  final: q_accept
+  reject: q_reject
 
 # Alphabets
 alphabet:
   - 'a'
   - 'b'
-  - 'c'
 tape_alphabet:
   - 'a'
   - 'b'
-  - 'c'
-  - 'B'
+  - 'X'  # Marca para 'a'
+  - 'Y'  # Marca para 'b'
+  - 'B'  # Representa espacio vacío
 
 # Transition Function
 delta:
+  # Transiciones q0
   - params:
       initial_state: q0
       tape_input: 'a'
+      mem_cache_value: 'B'
+    output:
+      final_state: q1
+      tape_output: 'X'
+      tape_displacement: R
+      mem_cache_value: 'a'
+
+  - params:
+      initial_state: q0
+      tape_input: 'B'
+      mem_cache_value: 'B'
+    output:
+      final_state: q_accept
+      tape_output: 'B'
+      tape_displacement: S
+      mem_cache_value: 'B'
+
+  - params:
+      initial_state: q0
+      tape_input: 'Y'
+      mem_cache_value: 'B'
+    output:
+      final_state: q_accept
+      tape_output: 'Y'
+      tape_displacement: S
+      mem_cache_value: 'B'
+
+  - params:
+      initial_state: q0
+      tape_input: 'b'
+      mem_cache_value: 'B'
+    output:
+      final_state: q_reject
+      tape_output: 'b'
+      tape_displacement: S
+      mem_cache_value: 'B'
+
+ # Transiciones q1
+  - params:
+      initial_state: q1
+      tape_input: 'a'
+      mem_cache_value: 'a'
     output:
       final_state: q1
       tape_output: 'a'
       tape_displacement: R
-  - params:
-      initial_state: q0
-      tape_input: 'b'
-    output:
-      final_state: q5
-      tape_output: 'b'
-      tape_displacement: R
-  - params:
-      initial_state: q0
-      tape_input: 'c'
-    output:
-      final_state: q5
-      tape_output: 'c'
-      tape_displacement: R
+      mem_cache_value: 'a'
+
   - params:
       initial_state: q1
-      tape_input: 'a'
+      tape_input: 'b'
+      mem_cache_value: 'a'
     output:
       final_state: q1
-      tape_output: 'a'
+      tape_output: 'b'
       tape_displacement: R
+      mem_cache_value: 'a'
+
   - params:
       initial_state: q1
-      tape_input: 'b'
+      tape_input: 'B'
+      mem_cache_value: 'a'
     output:
       final_state: q2
-      tape_output: 'b'
+      tape_output: 'B'
+      tape_displacement: L
+      mem_cache_value: 'B'
+
+  - params:
+      initial_state: q1
+      tape_input: 'Y'
+      mem_cache_value: 'a'
+    output:
+      final_state: q1
+      tape_output: 'Y'
       tape_displacement: R
+      mem_cache_value: 'a'
+
+  - params:
+      initial_state: q1
+      tape_input: 'B'
+      mem_cache_value: 'B'
+    output:
+      final_state: q_accept
+      tape_output: 'B'
+      tape_displacement: S
+      mem_cache_value: 'B'
+
+  - params:
+      initial_state: q1
+      tape_input: 'a'
+      mem_cache_value: 'B'
+    output:
+      final_state: q_reject
+      tape_output: 'a'
+      tape_displacement: S
+      mem_cache_value: 'B'
+
+ # Transiciones q2
+  - params:
+      initial_state: q2
+      tape_input: 'b'
+      mem_cache_value: 'B'
+    output:
+      final_state: q3
+      tape_output: 'Y'
+      tape_displacement: L
+      mem_cache_value: 'b'
+
+  - params:
+      initial_state: q2
+      tape_input: 'Y'
+      mem_cache_value: 'B'
+    output:
+      final_state: q2
+      tape_output: 'Y'
+      tape_displacement: L
+      mem_cache_value: 'B'
+
   - params:
       initial_state: q2
       tape_input: 'a'
+      mem_cache_value: 'B'
     output:
-      final_state: q2
+      final_state: q_reject
       tape_output: 'a'
-      tape_displacement: R
+      tape_displacement: S
+      mem_cache_value: 'B'
+
+ # Transiciones q3
   - params:
-      initial_state: q2
+      initial_state: q3
       tape_input: 'b'
+      mem_cache_value: 'b'
     output:
       final_state: q3
       tape_output: 'b'
-      tape_displacement: R
+      tape_displacement: L
+      mem_cache_value: 'b'
+
   - params:
       initial_state: q3
       tape_input: 'a'
+      mem_cache_value: 'b'
     output:
       final_state: q3
       tape_output: 'a'
+      tape_displacement: L
+      mem_cache_value: 'b'
+
+  - params:
+      initial_state: q3
+      tape_input: 'X'
+      mem_cache_value: 'b'
+    output:
+      final_state: q0
+      tape_output: 'X'
       tape_displacement: R
+      mem_cache_value: 'B'
+
+  - params:
+      initial_state: q3
+      tape_input: 'a'
+      mem_cache_value: 'B'
+    output:
+      final_state: q_reject
+      tape_output: 'a'
+      tape_displacement: S
+      mem_cache_value: 'B'
+
   - params:
       initial_state: q3
       tape_input: 'b'
+      mem_cache_value: 'B'
     output:
-      final_state: q4
+      final_state: q_reject
       tape_output: 'b'
-      tape_displacement: R
-  - params:
-      initial_state: q3
-      tape_input: 'c'
-    output:
-      final_state: q5
-      tape_output: 'c'
-      tape_displacement: R
+      tape_displacement: S
+      mem_cache_value: 'B'
 
 # Simulation
 posHead: 0
 simulation_strings:
   - 'aaabbb' # Accepted
+  - 'aabb'   # Accepted
+  - 'aaabb'  # Rejected (mismatch in number of a's and b's)
+  - 'aabbbb' # Rejected (mismatch in number of a's and b's)
