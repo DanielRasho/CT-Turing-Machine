@@ -1,0 +1,20 @@
+digraph {
+	q0
+	q_cache
+	q_move
+	q_check
+	q_accept [color=lightgreen shape=doublecircle style=filled]
+	q_reject [color=red shape=doublecircle style=filled]
+	q0 -> q_cache [label="(0,  / B, 0 ,R)"]
+	q0 -> q_cache [label="(1,  / B, 1 ,R)"]
+	q0 -> q_accept [label="(B,  / B,  ,S)"]
+	q_cache -> q_cache [label="(0, 0 / 0, 0 ,R)"]
+	q_cache -> q_cache [label="(1, 0 / 0, 1 ,R)"]
+	q_cache -> q_move [label="(B, 0 / B, 0 ,L)"]
+	q_cache -> q_move [label="(B, 1 / B, 1 ,L)"]
+	q_move -> q_check [label="(0, 0 / B,  ,L)"]
+	q_move -> q_check [label="(1, 1 / B,  ,L)"]
+	q_check -> q_accept [label="(B,  / B,  ,S)"]
+	q_check -> q_reject [label="(0, 1 / B,  ,S)"]
+	q_check -> q_reject [label="(1, 0 / B,  ,S)"]
+}
