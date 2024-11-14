@@ -219,3 +219,10 @@ simulation_strings:
   - 'aabb'   # Accepted
   - 'aaabb'  # Rejected (mismatch in number of a's and b's)
   - 'aabbbb' # Rejected (mismatch in number of a's and b's)
+  - 'ab'
+  - 'aaaaaab'
+  - 'b'
+  - 'aab'
+  - 'aabbbbbbbbb'
+  - 'aaaaabbbbb'
+  - 'sde'
