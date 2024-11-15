@@ -137,7 +137,7 @@ class TM:
             # Detectar bucle verificando si la transición no existe
             if simbolo_actual not in self.transiciones.get(estado_actual, {}).get(cache, {}):
                 result = "bucle"
-                self.historial.append(f"|- [{estado_actual}] - No tiene transición para [{simbolo_actual}], se detectó un bucle")
+                self.historial.append(f"|- [{estado_actual}, '{cache}'] '{simbolo_actual}'- No tiene transición para [{simbolo_actual}], se detectó un bucle")
                 isBucle = True
                 continue
 
