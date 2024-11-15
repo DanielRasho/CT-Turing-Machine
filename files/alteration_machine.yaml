@@ -1,0 +1,107 @@
+# turing_machine_config.yaml
+
+# States
+q_states:
+  q_list:
+    - q0       # Find Space
+    - q1       # Move Character
+    - q2       # Place Character
+    - q3       # Place Character
+    - q_halt  # Place Character
+    - q_reject
+  initial: q0
+  final: q_halt
+  reject: q_reject
+
+# Alphabets
+alphabet:
+  - 'a'
+  - '_'
+  - '#'
+tape_alphabet:
+  - 'a'
+  - '_'
+  - '#'
+  - 'B' # Representa espacio vacío
+
+# Transition Function
+delta:
+  - params:
+      initial_state: q0
+      tape_input: 'a'
+      mem_cache_value: 'B'
+    output:
+      final_state: q0
+      tape_output: 'a'
+      tape_displacement: R
+      mem_cache_value: 'B'
+  - params:
+      initial_state: q0
+      tape_input: '_'
+      mem_cache_value: 'B'
+    output:
+      final_state: q1
+      tape_output: '_'
+      tape_displacement: R
+      mem_cache_value: 'B'
+  - params:
+      initial_state: q1
+      tape_input: '_'
+      mem_cache_value: 'B'
+    output:
+      final_state: q1
+      tape_output: '_'
+      tape_displacement: R
+      mem_cache_value: 'B'
+  - params:
+      initial_state: q1
+      tape_input: 'a'
+      mem_cache_value: 'B'
+    output:
+      final_state: q2
+      tape_output: '_'
+      tape_displacement: L
+      mem_cache_value: 'a'
+  - params:
+      initial_state: q1
+      tape_input: '#'
+      mem_cache_value: 'B'
+    output:
+      final_state: q_halt
+      tape_output: '_'
+      tape_displacement: S
+      mem_cache_value: 'B'
+  - params:
+      initial_state: q2
+      tape_input: '_'
+      mem_cache_value: 'a'
+    output:
+      final_state: q2
+      tape_output: '_'
+      tape_displacement: L
+      mem_cache_value: 'a'
+  - params:
+      initial_state: q2
+      tape_input: 'a'
+      mem_cache_value: 'a'
+    output:
+      final_state: q3
+      tape_output: 'a'
+      tape_displacement: R
+      mem_cache_value: 'a'
+  - params:
+      initial_state: q3
+      tape_input: '_'
+      mem_cache_value: 'a'
+    output:
+      final_state: q0
+      tape_output: 'a'
+      tape_displacement: S
+      mem_cache_value: 'B'
+
+# Simulation
+posHead: 1
+simulation_strings:
+  - 'aaa___a#' # Accepted
+  - 'a_a#'  # Rejected
+  - 'aa#'  # Accepted
