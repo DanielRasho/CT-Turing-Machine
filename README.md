@@ -3,7 +3,9 @@
 Este proyecto implementa una **Máquina de Turing Monocinta**, configurable a través de archivos `.yaml`.
 
 ## 🎥 Video demostración
-[⭕ **VIDEO DEMO**](#)
+
+1. [**MÁQUINA RECONOCEDORA**](https://youtu.be/XrqfSUh19gU)
+2. [**MÁQUINA ALTERADORA**](#)
 
 ---
 
