@@ -213,7 +213,6 @@ delta:
 
 
 # Simulation
-posHead: 0
 simulation_strings:
   - 'aaaaaabbbbbb'
   - 'aaaaabbbbb'
