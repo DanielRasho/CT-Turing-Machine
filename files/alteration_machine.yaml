@@ -102,6 +102,6 @@ delta:
 # Simulation
 posHead: 1
 simulation_strings:
-  - 'aaa___a#' # Accepted
+  - 'aaa___a_a#' # Accepted
   - 'a_a#'  # Rejected
   - 'aa#'  # Accepted
