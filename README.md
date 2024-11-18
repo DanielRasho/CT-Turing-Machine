@@ -6,7 +6,7 @@ Este proyecto implementa una **Máquina de Turing Monocinta**, configurable a tr
 
 1. [**Demostración Máquina Reconocedora**](https://youtu.be/XrqfSUh19gU)
 2. [**Demostración Máquina Alteradora**](#)
-3. [**Explicación del Código**](#)
+3. [**Explicación del Código**](https://youtu.be/qc1CEurB00I)
 
 ---
 
